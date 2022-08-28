@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1848853711607631939}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -150,7 +150,6 @@ MonoBehaviour:
   damage: 3
   speed: 20
   liveTime: 2
-  player: {fileID: 2804061586383016024, guid: 5f6b0743b4f51b74ea53db675a7a8131, type: 3}
 --- !u!136 &5272030476975511426
 CapsuleCollider:
   m_ObjectHideFlags: 0

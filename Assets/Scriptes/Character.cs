@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    [SerializeField] protected float health = 1f;
+    [SerializeField] private float health = 1f;
     [SerializeField] protected float speed = 1f;
-    //[SerializeField] protected float damage = 1f;
     [SerializeField] protected float atackSpeed = 2f;
     [SerializeField] protected GameObject damageeffect;
     [SerializeField] protected Animator characterAnimator;
     [SerializeField] protected Vector3 damageEffectPosition;
+    [SerializeField] protected AudioClip damageEffectSound;
+    [SerializeField] protected AudioSource characterAudio;
+    [SerializeField] protected AudioClip attackEffectSound;
+    [SerializeField] protected AudioClip deathEffectSound;
+
+
+    public float Health { get => health; private set => health = value; }
 
     public virtual void Attack()
     {
@@ -19,18 +25,31 @@ public class Character : MonoBehaviour
 
     public virtual void TakeDamage(float damage)
     {
-        if (health >= 0)
+        if (Health >= 0)
         {
-            health -= damage;
+            Health -= damage;
+            if (damageeffect != null)
+            {
+                Instantiate(damageeffect, transform.position + damageEffectPosition, Quaternion.identity, transform);
+            }
+
+            if (damageEffectSound != null)
+            {
+                characterAudio.clip = damageEffectSound;
+                characterAudio.Play();
+            }
         }
-        if (damageeffect != null)
-        {
-            Instantiate(damageeffect, transform.position + damageEffectPosition, Quaternion.identity, transform);
-        }
+
     }
 
-    public void Die()
+    public virtual void Die()
     {
+        if (deathEffectSound != null)
+        {
+            characterAudio.clip = deathEffectSound;
+            characterAudio.Play();
+        }
+      
         Destroy(gameObject);
     }
 }

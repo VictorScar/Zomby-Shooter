@@ -35,6 +35,7 @@ public class Enemy : Character
 
             if (!distanceOfAtack)
             {
+                characterAnimator.Play("Zombie1_Walk");
                 transform.LookAt(target.transform.position);
                 //transform.Translate((target.transform.position - transform.position).normalized * speed * Time.deltaTime);
                 //transform.LookAt(target.transform.position);
@@ -45,13 +46,13 @@ public class Enemy : Character
             {
                 Attack();
             }
-            //if (transform.position.z - target.transform.position.z == ofset.z && transform.position.x - target.transform.position.x == ofset.x)
-            //{
-            //    Atack();
-            //}
+        }
+        else
+        {
+            characterAnimator.Play("Zombie1_Idle");
         }
 
-        if (health <= 0)
+        if (Health <= 0)
         {
             Die();
         }
@@ -60,24 +61,25 @@ public class Enemy : Character
     public override void Attack()
     {
         base.Attack();
+        if (attackEffectSound !=null)
+        {
+            characterAudio.clip = attackEffectSound;
+        }
+       
         count += Time.deltaTime;
         if (count >= atackSpeed)
         {
+            characterAnimator.Play("Zombie1 atack");
+            characterAudio.Play();
             target.TakeDamage(damage);
             count = 0;
         }
     }
 
-    //public override void TakeDamage(float damage)
-    //{
-    //    if (health >= 0)
-    //    {
-    //        health -= damage;
-    //    }
-    //    if (damageeffect != null)
-    //    {
-    //        Instantiate(damageeffect, transform.position + damageEffectPosition, Quaternion.identity, transform);
-    //    }
-    //}
+    public override void Die()
+    {
+        characterAnimator.Play("Zombie1_Death");
+        base.Die();
+    }
 
 }

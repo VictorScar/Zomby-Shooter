@@ -24,5 +24,9 @@ public class Spawner : MonoBehaviour
       
     }
 
+    public void StopSpawn()
+    {
+
+    }
 
 }

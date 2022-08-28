@@ -10,20 +10,14 @@ public class Player : Character
     [SerializeField] new Camera camera;
     [SerializeField] int reloadSpeed = 3;
     [SerializeField] int magazineСapacity = 30;
+    public event Action OnPlayerDie;
     int quantityOfCartridges;
-
-    //float count;
-
-
-    //Поворот !
-    //Стрельба !
-    //Смерть
 
     void Start()
     {
         Game.GameInstance.Player = this;
         quantityOfCartridges = magazineСapacity;
-        //camera = Camera.main;
+        camera = Camera.main;
     }
 
     void Update()
@@ -36,12 +30,14 @@ public class Player : Character
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Attack();
+            characterAnimator.Play("assault_combat_idle");
         }
 
-        if (health <= 0)
+        if (Health <= 0)
         {
             Die();
         }
+        Game.GameInstance.UIScreen.ShowQuantityCartridge(quantityOfCartridges);
     }
 
     public override void Attack()
@@ -51,6 +47,9 @@ public class Player : Character
         {
             Bullet instBullet = Instantiate(bullet, muzzle.transform.position, muzzle.transform.rotation);
             quantityOfCartridges--;
+            characterAnimator.Play("assault_combat_shoot");
+            characterAudio.clip = attackEffectSound;
+            characterAudio.Play();
         }
         else
         {
@@ -60,9 +59,16 @@ public class Player : Character
 
     IEnumerator Reloading()
     {
-        Game.GameInstance.ReloadingText.SetActive(true);
+        Game.GameInstance.UIScreen.ShowReloading(true);
+        characterAnimator.Play("assault_combat_shoot_burst");
         yield return new WaitForSeconds(reloadSpeed);
-        Game.GameInstance.ReloadingText.SetActive(false);
+        Game.GameInstance.UIScreen.ShowReloading(false);
         quantityOfCartridges = magazineСapacity;
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        OnPlayerDie();
     }
 }

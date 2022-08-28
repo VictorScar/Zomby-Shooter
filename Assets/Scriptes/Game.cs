@@ -7,16 +7,18 @@ using UnityEngine;
 public class Game : MonoBehaviour
 {
     [SerializeField] Player player;
-    [SerializeField] GameObject reloadingText;
-    [SerializeField] TMP_Text lifeTimetext;
+    [SerializeField] UIScreen uIScreen;
+    bool isGameOver;
     float lifetime = 0f;
     int seconds = 0;
     int minutes = 0;
     int hours = 0;
+    int[] timeFormated = new int[3];
 
     public static Game GameInstance { get; private set; }
     public Player Player { get => player; set => player = value; }
-    public GameObject ReloadingText { get => reloadingText; }
+    public int[] TimeFormated { get => timeFormated; }
+    public UIScreen UIScreen { get => uIScreen; private set => uIScreen = value; }
 
     void Awake()
     {
@@ -24,25 +26,52 @@ public class Game : MonoBehaviour
         {
             GameInstance = this;
         }
+        DontDestroyOnLoad(gameObject);
+        isGameOver = false;
+        player.OnPlayerDie += GameOver;
     }
 
     void Update()
     {
-        Timer();
+        if (!isGameOver)
+        {
+            UIScreen.ShowLifetime(Timer());
+            UIScreen.ShowHealth(player.Health);
+        }
+        
     }
 
-    public void Timer()
+    public int[] Timer()
     {
         lifetime += Time.deltaTime;
-        //Debug.Log(lifetime.ToString());
-        seconds = (int)(lifetime / 60);
-       // Debug.Log("Seconds: " + seconds.ToString());
+        if (lifetime >= 1)
+        {
+            seconds++;
+            lifetime = 0;
+            TimeFormated[2] = seconds;
+        }
 
-        minutes = (int)seconds / 60;
-        Debug.Log("Minutes: " + minutes.ToString() + "Seconds: " + seconds.ToString());
+        if (seconds == 60)
+        {
+            minutes++;
+            seconds = 0;
+            TimeFormated[1] = minutes;
+        }
 
+        if (minutes == 60)
+        {
+            hours++;
+            minutes = 0;
+            TimeFormated[0] = hours;
 
-        lifeTimetext.text = string.Format(CultureInfo.InvariantCulture,"{0:00:00:00}", hours, minutes, seconds);
+        }
 
+        return TimeFormated;
+    }
+
+    public void GameOver()
+    {
+        uIScreen.ShowGameOverPanel(timeFormated);
+        isGameOver=true;
     }
 }
