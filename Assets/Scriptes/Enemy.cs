@@ -5,15 +5,13 @@ using UnityEngine;
 
 public class Enemy : Character
 {
-    //[SerializeField] float health = 1f;
-    //[SerializeField] float speed = 1f;
     [SerializeField] protected float damage = 1f;
-    //[SerializeField] float atackSpeed = 2f;
     [SerializeField] Player target;
-    //[SerializeField] GameObject damageeffect;
+    [SerializeField] Collider enemyCollider;
     [SerializeField] Vector3 ofset = new Vector3(0f, 0, 0.2f);
     float count = 0;
-    bool distanceOfAtack = false;
+    bool distanceOfAtackX = false;
+    bool distanceOfAtackZ = false;
 
     private void Start()
     {
@@ -28,58 +26,76 @@ public class Enemy : Character
     {
         if (target != null)
         {
-            if (transform.position.z - target.transform.position.z == ofset.z | transform.position.z - target.transform.position.z <= ofset.z + 1f | transform.position.z - target.transform.position.z <= ofset.z - 1f)
+            if (Health > 0)
             {
-                distanceOfAtack = true;
-            }
+                if (transform.position.z - target.transform.position.z == ofset.z | transform.position.z - target.transform.position.z <= ofset.z + 1f | transform.position.z - target.transform.position.z <= ofset.z - 1f)
+                {
+                    distanceOfAtackZ = true;
+                }
+                if (transform.position.x - target.transform.position.x == ofset.x | transform.position.x - target.transform.position.x <= ofset.x + 1f | transform.position.x - target.transform.position.x <= ofset.x - 1f)
+                {
+                    distanceOfAtackX = true;
+                }
 
-            if (!distanceOfAtack)
-            {
-                characterAnimator.Play("Zombie1_Walk");
-                transform.LookAt(target.transform.position);
-                //transform.Translate((target.transform.position - transform.position).normalized * speed * Time.deltaTime);
-                //transform.LookAt(target.transform.position);
-                transform.Translate(-transform.forward * speed * Time.deltaTime);
-            }
+                if (!(distanceOfAtackZ && distanceOfAtackX))
+                {
+                    characterAnimator.Play("Zombie1_Walk");
+                    transform.LookAt(target.transform.position);
+                    transform.Translate(-transform.forward * speed * Time.deltaTime);
+                }
 
+                else
+                {
+                    Attack();
+                }
+            }
             else
             {
-                Attack();
+                Destroy(enemyCollider);
+                Die();
             }
+
         }
         else
         {
             characterAnimator.Play("Zombie1_Idle");
         }
-
-        if (Health <= 0)
-        {
-            Die();
-        }
     }
 
     public override void Attack()
     {
-        base.Attack();
-        if (attackEffectSound !=null)
+        if (attackEffectSound != null)
         {
             characterAudio.clip = attackEffectSound;
         }
-       
-        count += Time.deltaTime;
-        if (count >= atackSpeed)
+        if (count == 0)
         {
             characterAnimator.Play("Zombie1 atack");
             characterAudio.Play();
             target.TakeDamage(damage);
-            count = 0;
+            count = atackSpeed;
         }
+        count += Time.deltaTime;
     }
 
     public override void Die()
     {
-        characterAnimator.Play("Zombie1_Death");
-        base.Die();
+        if (characterAnimator != null)
+        {
+            characterAnimator.Play("Zombie1_Death");
+        }
+        if (deathEffectSound != null)
+        {
+            characterAudio.clip = deathEffectSound;
+            characterAudio.Play();
+        }
+        StartCoroutine(DieAnimation());
     }
 
+    IEnumerator DieAnimation()
+    {
+
+        yield return new WaitForSeconds(3);
+        base.Die();
+    }
 }

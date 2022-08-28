@@ -44,12 +44,6 @@ public class Character : MonoBehaviour
 
     public virtual void Die()
     {
-        if (deathEffectSound != null)
-        {
-            characterAudio.clip = deathEffectSound;
-            characterAudio.Play();
-        }
-      
         Destroy(gameObject);
     }
 }
