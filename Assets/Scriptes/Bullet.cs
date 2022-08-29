@@ -5,7 +5,6 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] GameObject prefabBullet;
-    [SerializeField] GameObject effect2;
     [SerializeField] float damage = 5f;
     [SerializeField] float speed = 5f;
     [SerializeField] float liveTime = 5f;
@@ -39,7 +38,6 @@ public class Bullet : MonoBehaviour
         else
         {
             Destroy(gameObject);
-            //Instantiate(effect2);
         }
     }
 }

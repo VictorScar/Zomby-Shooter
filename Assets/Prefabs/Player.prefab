@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2013051758509387598}
   - component: {fileID: 2804061586383016024}
+  - component: {fileID: 5359337843312862942}
   - component: {fileID: 1903698028587634642}
   m_Layer: 0
   m_Name: Player
@@ -60,8 +61,23 @@ MonoBehaviour:
   bullet: {fileID: 398323465503606201, guid: dc5f23f9fcbe3f24fa504cd2dc4545fd, type: 3}
   muzzle: {fileID: 2471552962409501689}
   camera: {fileID: 0}
+  playerInputs: {fileID: 0}
   reloadSpeed: 3
   "magazine\u0421apacity": 30
+--- !u!114 &5359337843312862942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013051758509387599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b16b68347a2bf444bf47969ec0e253a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 0}
+  player: {fileID: 2804061586383016024}
 --- !u!82 &1903698028587634642
 AudioSource:
   m_ObjectHideFlags: 0

@@ -2899,6 +2899,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a351b39a281ea264e81774782f59c91d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1833767549 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5359337843312862942, guid: 5f6b0743b4f51b74ea53db675a7a8131, type: 3}
+  m_PrefabInstance: {fileID: 2013051759314190067}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b16b68347a2bf444bf47969ec0e253a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1857753179 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4812561485007036474, guid: 9ee261d07df2f934ca0ae726591ebc04, type: 3}
@@ -3431,9 +3442,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 963194227}
     - target: {fileID: 2804061586383016024, guid: 5f6b0743b4f51b74ea53db675a7a8131, type: 3}
+      propertyPath: playerInputs
+      value: 
+      objectReference: {fileID: 1833767549}
+    - target: {fileID: 2804061586383016024, guid: 5f6b0743b4f51b74ea53db675a7a8131, type: 3}
       propertyPath: characterAnimator
       value: 
       objectReference: {fileID: 1801635086}
+    - target: {fileID: 5359337843312862942, guid: 5f6b0743b4f51b74ea53db675a7a8131, type: 3}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 963194227}
     - target: {fileID: 6351233255626799993, guid: 5f6b0743b4f51b74ea53db675a7a8131, type: 3}
       propertyPath: bullet
       value: 

@@ -7,37 +7,47 @@ public class Player : Character
 {
     [SerializeField] Bullet bullet;
     [SerializeField] GameObject muzzle;
-    [SerializeField] new Camera camera;
+    [SerializeField] PlayerInputs playerInputs;
     [SerializeField] int reloadSpeed = 3;
     [SerializeField] int magazineСapacity = 30;
     public event Action OnPlayerDie;
     int quantityOfCartridges;
+    bool isBlockedInputs = false;
 
     void Start()
     {
         Game.GameInstance.Player = this;
         quantityOfCartridges = magazineСapacity;
-        camera = Camera.main;
     }
 
     void Update()
     {
-
-        Vector3 direction = Input.mousePosition - camera.WorldToScreenPoint(transform.position);  
-        var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(90 - angle, Vector3.up);
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        characterAnimator.Play("assault_combat_idle");
+        if (!isBlockedInputs)
         {
-            Attack();
-            characterAnimator.Play("assault_combat_idle");
-        }
+            Rotation();
 
+            if (playerInputs.PressFire())
+            {
+                Attack();
+            }
+        }
+        
         if (Health <= 0)
         {
             Die();
         }
         Game.GameInstance.UIScreen.ShowQuantityCartridge(quantityOfCartridges);
+    }
+
+    void Rotation()
+    {
+        Quaternion direction = playerInputs.GetDirection();
+        if (direction != null)
+        {
+            transform.rotation = direction;
+        }
+
     }
 
     public override void Attack()
@@ -59,15 +69,18 @@ public class Player : Character
 
     IEnumerator Reloading()
     {
+        isBlockedInputs = true;
         Game.GameInstance.UIScreen.ShowReloading(true);
         characterAnimator.Play("assault_combat_shoot_burst");
         yield return new WaitForSeconds(reloadSpeed);
         Game.GameInstance.UIScreen.ShowReloading(false);
         quantityOfCartridges = magazineСapacity;
+        isBlockedInputs=false;
     }
 
     public override void Die()
     {
+        isBlockedInputs = true;
         base.Die();
         OnPlayerDie();
     }
